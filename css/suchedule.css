@@ -306,6 +306,20 @@ input[id*=day-filter-]:checked + label {
     margin-top: 5px;
 }
 
+.course-link {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 12px;
+    background-color: #173A6A;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    width: 100px;
+    height: 20px;
+    line-height: 20px;
+    transition: color 300ms ease;
+}
+
 .section-type {
     margin-top: 10px;
     margin-bottom: 5px;

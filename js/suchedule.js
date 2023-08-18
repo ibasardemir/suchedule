@@ -3,6 +3,7 @@ const config = {
     dataVersion: 34
 };
 
+config.courseLink = 'https://www.sabanciuniv.edu/tr/aday-ogrenciler/lisans/ders-katalogu/course/'
 config.infoLink = `https://suis.sabanciuniv.edu/prod/bwckschd.p_disp_detail_sched?term_in=${config.term}&crn_in=`;
 Object.freeze(config);
 
@@ -33,6 +34,7 @@ const templateGenerator = (() => {
                 <div class="course-expand icon-right-open-big"></div>
             </div>
             <div class="course-info">
+            <a href="${config.courseLink}${course.code.replace(" ","-")}" class="course-link" target="_blank">Course info</a>
             ${course.classes.map(_class => `
                 <div class="course-sections">
                     <div class="section-type">Sections${_class.type ? ` (${_class.type})` : ``}</div>

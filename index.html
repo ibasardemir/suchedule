@@ -5,15 +5,15 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="title" content="SUchedule"/>
+    <meta name="title" content="SUchedule+"/>
     <meta name="description" content="This website allows Sabancı University students to create their schedule with a
     friendly user interface."/>
-    <meta name="keywords" content="Schedule, Sabancı Universitesi, Sabanci University, Suchedule"/>
+    <meta name="keywords" content="Schedule, Sabancı Universitesi, Sabanci University, Suchedule+"/>
     <meta name="author" content="Adnan Burak Ayaz"/>
     <meta name="owner" content="Adnan Burak Ayaz"/>
-    <meta name="copyright" content="(c) 2018"/>
-    <meta property="og:site_name" content="SUchedule">
-    <meta property="og:title" content="SUchedule" />
+    <meta name="copyright" content="(c) 2023"/>
+    <meta property="og:site_name" content="SUchedule+">
+    <meta property="og:title" content="SUchedule+" />
     <meta property="og:description" content="This website allows Sabancı University students to create their schedule
     with a friendly user interface." />
     <meta property="og:image" itemprop="image" content="favicon.ico">
@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="font/animation.min.css">
     <link rel="stylesheet" href="font/fontello.min.css">
     <link rel="stylesheet" href="css/jquery.modal.min.css">
-    <link rel="stylesheet" href="css/suchedule.min.css">
+    <link rel="stylesheet" href="css/suchedule.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="icon" href="favicon.ico" type="image/x-icon"/>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
@@ -31,11 +31,11 @@
 
 <body>
 <header>
-    <div id="logo">SUchedule</div>
+    <div id="logo">SUchedule+</div>
     <div id="about-button" class="icon-help button"></div>
     <div id="clear-button" class="icon-trash button">Clear</div>
     <div id="copy-button" class="icon-clipboard button">Copy Crn</div>
-    <div id="google-calendar-button" class="icon-google-calendar button">Add to Calendar</div>
+    <!--<div id="google-calendar-button" class="icon-google-calendar button">Add to Calendar</div>-->
 </header>
 <div id="menu">
     <div id="menu-toggle" class="icon-menu button"></div>
@@ -251,6 +251,7 @@
         <div class="notification-button button">Apology Accepted</div>
     </div>
 </div>
+<!--
 <div id="google-calendar-modal" class="modal">
     <h3>Add current courses to your Google Calendar</h3>
 
@@ -284,14 +285,16 @@
         <button id="signout-button" class="icon-cancel modal-button">Sign Out</button>
     </div>
 </div>
+-->
 
 <script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/jquery.modal.min.js"></script>
 <script src="js/clipboard.min.js"></script>
-<script src="js/suchedule.min.js"></script>
+<script src="js/suchedule.js"></script>
+<!--
 <script src="https://apis.google.com/js/api.js"></script>
 <script src="js/google_calendar_integration.min.js"></script>
-<!-- Global site tag (gtag.js) - Google Analytics -->
+ Global site tag (gtag.js) - Google Analytics 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113204083-2"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
@@ -304,5 +307,6 @@
 
     gtag('config', 'UA-113204083-2');
 </script>
+-->
 </body>
 </html>
