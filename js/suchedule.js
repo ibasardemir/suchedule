@@ -1,10 +1,10 @@
 const config = {
     term: '202301',
-    dataVersion: 34
+    dataVersion: 35
 };
 
-config.courseLink = 'https://www.sabanciuniv.edu/tr/aday-ogrenciler/lisans/ders-katalogu/course/'
 config.infoLink = `https://suis.sabanciuniv.edu/prod/bwckschd.p_disp_detail_sched?term_in=${config.term}&crn_in=`;
+config.courseLink = (code) => { let subject = code.split(" ");return "https://suis.sabanciuniv.edu/prod/bwckctlg.p_display_courses?term_in="+config.term+"&one_subj="+subject[0]+"&sel_crse_strt="+subject[1]+"&sel_crse_end="+subject[1]+"&sel_subj=&sel_levl=&sel_schd=&sel_coll=&sel_divs=&sel_dept=&sel_attr=";};
 Object.freeze(config);
 
 const templateGenerator = (() => {
@@ -34,7 +34,7 @@ const templateGenerator = (() => {
                 <div class="course-expand icon-right-open-big"></div>
             </div>
             <div class="course-info">
-            <a href="${config.courseLink}${course.code.replace(" ","-")}" class="course-link" target="_blank">Course info</a>
+            <a href="${config.courseLink(course.code)}${/*course.code.replace(" ","-")*/null}" class="course-link" target="_blank">Course info</a>
             ${course.classes.map(_class => `
                 <div class="course-sections">
                     <div class="section-type">Sections${_class.type ? ` (${_class.type})` : ``}</div>
@@ -876,3 +876,12 @@ const classCells = (() => {
         notification.fadeIn(500);
     });
 })();
+const creditsys = {
+     sum : 0,
+     addcredit : (course) => {sum+=course.credit;this.update();},
+     removecredit : (course) => {sum-=course.credit;this.update();},
+     update : ()=> {
+        const creditElement = $("#credit-element");
+        creditElement.text(this.sum);
+     }
+}
