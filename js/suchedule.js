@@ -7,6 +7,19 @@ config.infoLink = `https://suis.sabanciuniv.edu/prod/bwckschd.p_disp_detail_sche
 config.courseLink = (code) => { let subject = code.split(" ");return "https://suis.sabanciuniv.edu/prod/bwckctlg.p_display_courses?term_in="+config.term+"&one_subj="+subject[0]+"&sel_crse_strt="+subject[1]+"&sel_crse_end="+subject[1]+"&sel_subj=&sel_levl=&sel_schd=&sel_coll=&sel_divs=&sel_dept=&sel_attr=";};
 Object.freeze(config);
 
+const creditsys = {
+    sum : 1,
+
+      update () {
+        const creditElement = $("#credit-element");
+        creditElement.text(`Total credits: ${this.sum}`);
+        console.log("asd");
+     },
+    addcredit : (course) => {sum+=course.credit;this.update();},
+    removecredit : (course) => {sum-=course.credit;this.update();},
+    addNumCredit : function(amount) {this.sum+=amount;this.update();}
+    
+}
 const templateGenerator = (() => {
     const getDayFromCode = (() => {
         // const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'TBA'];
@@ -27,7 +40,7 @@ const templateGenerator = (() => {
         return `${start < 10 ? '0' : ''}${start}:40-${end < 10 ? '0' : ''}${end}:30`;
     };
 
-    const makeCourseEntry = (course, instructors, places) => `
+    const makeCourseEntry = (course, instructors, places,credit=0) => `
         <div class="course-entry hide-info" data-code="${course.code}">
             <div class="course-header">
                 <div class="course-name">${course.code} - ${course.name}</div>
@@ -41,7 +54,7 @@ const templateGenerator = (() => {
                 ${_class.sections.map(section => `
                     <div class="course-section" 
                         data-section-name="${course.code.replace(' ', '')}${_class.type} - ${section.group}"
-                        data-crn="${section.crn}">
+                        data-crn="${section.crn}" data-credits="${course.credits}">
                     <div class="section-info">
                         <div class="section-header">
                             <div class="section-group" data-group="${section.group}">${section.group}</div>
@@ -69,8 +82,8 @@ const templateGenerator = (() => {
         </div>
     `;
 
-    const makeCellCourse = (sectionName, crn, bgColor = 'azure') => `
-        <div class="cell-course" data-crn="${crn}" data-section-name="${sectionName}"
+    const makeCellCourse = (sectionName, crn, bgColor = 'azure',credits=0) => `
+        <div class="cell-course" data-crn="${crn}" data-section-name="${sectionName}" data-credits="${credits}"
             style="background-color: ${bgColor};">
             <div>${sectionName}</div>
             <div class="remove-course"></div>
@@ -188,7 +201,6 @@ const courseEntry = (() => {
 
     courseEntry.prototype.hideSelectionsOnSchedule = function () {
         $('.class-cell').removeClass('selection');
-
         return this;
     };
 
@@ -244,7 +256,7 @@ const courseEntry = (() => {
         const color = colorPalette.getColor();
 
         this.getSections('.course-section.selected').forEach(section => {
-            section.getClassCells().addCellCourse(cellCourses.make(section.getName(), section.getCrn(), color));
+            section.getClassCells().addCellCourse(cellCourses.make(section.getName(), section.getCrn(), color,section.getCredits()));
         });
 
         saveSchedule();
@@ -375,6 +387,9 @@ const sectionEntry = (() => {
     sectionEntry.prototype.getCrn = function () {
         return this.getElement().data('crn');
     };
+    sectionEntry.prototype.getCredits = function () {
+        return this.getElement().data('credits');
+    };
 
     sectionEntry.prototype.getName = function () {
         return this.getElement().data('section-name');
@@ -457,7 +472,9 @@ const sectionEntry = (() => {
 
     sectionEntry.prototype.toggleSelect = function () {
         this.isSelected() ? this.deselect() : this.select();
-
+        console.log("flip");
+        this.isSelected() ? creditsys.addNumCredit(this.getCredits()) : creditsys.addNumCredit(-this.getCredits()) ;
+        //creditsys.update();
         return this;
     };
 
@@ -594,8 +611,8 @@ const cellCourses = (() => {
 
     cellCourses.findByCourseCode = code => cellCourses($(`.cell-course[data-section-name^="${code}"]`));
 
-    cellCourses.make = (sectionName, crn, bgColor) => {
-        return cellCourses($(templateGenerator.makeCellCourse(sectionName, crn, bgColor)));
+    cellCourses.make = (sectionName, crn, bgColor,credits=0) => {
+        return cellCourses($(templateGenerator.makeCellCourse(sectionName, crn, bgColor,credits)));
     };
 
     return cellCourses;
@@ -728,11 +745,12 @@ const classCells = (() => {
 
     $(document).on('click', '.course-section', event => {
         sectionEntry($(event.currentTarget)).toggleSelect();
+        console.log("add withoutbug2");
     });
 
     $(document).on('click', '.remove-course', event => {
         sectionEntry($(event.currentTarget).parent().data('crn')).toggleSelect();
-
+        console.log("remove");
         event.stopPropagation();
     });
 
@@ -846,7 +864,6 @@ const classCells = (() => {
     $(document).on('click', '#notify-clear .notification-button', () => {
         $('.course-section.selected').removeClass('selected');
         $('.class-cell').attr('class', 'class-cell').children().remove();
-
         colorPalette.reset();
 
         saveSchedule();
@@ -876,12 +893,3 @@ const classCells = (() => {
         notification.fadeIn(500);
     });
 })();
-const creditsys = {
-     sum : 0,
-     addcredit : (course) => {sum+=course.credit;this.update();},
-     removecredit : (course) => {sum-=course.credit;this.update();},
-     update : ()=> {
-        const creditElement = $("#credit-element");
-        creditElement.text(this.sum);
-     }
-}
