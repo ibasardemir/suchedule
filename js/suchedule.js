@@ -8,15 +8,13 @@ config.courseLink = (code) => { let subject = code.split(" ");return "https://su
 Object.freeze(config);
 
 const creditsys = {
-    sum : 1,
+    sum : 0,
 
       update () {
         const creditElement = $("#credit-element");
         creditElement.text(`Total credits: ${this.sum}`);
         console.log("asd");
      },
-    addcredit : (course) => {sum+=course.credit;this.update();},
-    removecredit : (course) => {sum-=course.credit;this.update();},
     addNumCredit : function(amount) {this.sum+=amount;this.update();}
     
 }
@@ -456,7 +454,7 @@ const sectionEntry = (() => {
         this.deselectAlternatives();
 
         this.getCourseEntry().actOnSectionSelected();
-
+        creditsys.addNumCredit(this.getCredits());
         return this;
     };
 
@@ -466,15 +464,14 @@ const sectionEntry = (() => {
         if (shouldNotifyCourseEntry) {
             this.getCourseEntry().actOnSectionDeselected();
         }
-
+        creditsys.addNumCredit(-this.getCredits());
         return this;
     };
 
     sectionEntry.prototype.toggleSelect = function () {
         this.isSelected() ? this.deselect() : this.select();
         console.log("flip");
-        this.isSelected() ? creditsys.addNumCredit(this.getCredits()) : creditsys.addNumCredit(-this.getCredits()) ;
-        //creditsys.update();
+        //this.isSelected() ? creditsys.addNumCredit(this.getCredits()) : creditsys.addNumCredit(-this.getCredits()) ;
         return this;
     };
 
